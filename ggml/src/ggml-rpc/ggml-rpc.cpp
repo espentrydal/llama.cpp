@@ -1831,12 +1831,6 @@ static bool ggml_backend_rpc_device_supports_op(ggml_backend_dev_t dev, const st
     //TODO: call the remote backend and cache the results
     // DSV4 custom ops are CPU-only; must not be scheduled on remote CUDA via RPC
     switch (op->op) {
-        case GGML_OP_DSV4_HC_SPLIT_SINKHORN:
-        case GGML_OP_DSV4_HC_WEIGHTED_SUM:
-        case GGML_OP_DSV4_HC_EXPAND:
-        case GGML_OP_DSV4_FP8_KV_QUANTIZE:
-        case GGML_OP_DSV4_ROPE_TAIL:
-            return false;
         case GGML_OP_REPEAT:
             {
                 // ggml_cuda_op_bin_bcast only supports F32/F16; reject others so they stay on CPU
