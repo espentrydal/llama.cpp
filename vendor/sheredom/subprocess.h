@@ -1205,6 +1205,9 @@ cleanup:
 
   // Set working directory
   if (process_cwd) {
+#if defined(__GLIBC__) && !__GLIBC_PREREQ(2, 29)
+    // posix_spawn_file_actions_addchdir_np requires glibc 2.29; ignore process_cwd on older glibc.
+#else
 #if defined(__APPLE__) && MAC_OS_X_VERSION_MIN_REQUIRED >= 260000
     posix_error = posix_spawn_file_actions_addchdir(&actions, process_cwd);
 #else
@@ -1225,6 +1228,7 @@ cleanup:
       }
       goto cleanup;
     }
+#endif
   }
 
   // Close the stdin write end
